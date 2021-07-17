@@ -1,202 +1,222 @@
 import 'package:flutter/material.dart';
 import 'package:travel_ui/details/DestinationDetail.dart';
+import 'package:travel_ui/home/BottomNavigationBarTravel.dart';
+import 'package:travel_ui/models/HotDestinaltion.dart';
 import 'package:travel_ui/utils/TextWidget.dart';
 import 'package:travel_ui/utils/constant.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
-      floatingActionButton: Container(
-          width: MediaQuery.of(context).size.width - 80,
-          height: 80,
+      appBar: buildAppBar(),
+      body: SingleChildScrollView(
+        child:Container(
+          padding: EdgeInsets.symmetric(vertical: kDefaultPadding),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(50),
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                darkSecondaryColor,
-                lightTertiaryColor,
-              ],
-            ),
+                secondaryColor,
+                tertiaryColor,
+              ] 
+            ) 
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          child: Column(
             children: [
-              IconButton(
-                  icon: Icon(
-                    Icons.home,
-                    color: Colors.white38,
-                    size: 40,
+              Container(
+                height: 200,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: destination.length,
+                  itemBuilder: (context, index) => Padding(
+                    padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                    child: destinationCard(context, destination[index]['imagePath']!),
                   ),
-                  onPressed: null),
-              IconButton(
-                  icon: Icon(
-                    Icons.place,
-                    color: primaryColor,
-                    size: 40,
-                  ),
-                  onPressed: null),
-              IconButton(
-                  icon: Icon(
-                    Icons.person,
-                    color: Colors.white38,
-                    size: 40,
-                  ),
-                  onPressed: null),
-            ],
-          )),
-           floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              secondaryColor,
-              tertiaryColor,
-            ],
-          ),
-        ),
-        child: ListView(
-          children: [
-            customAppBar(),
-            SizedBox(
-              height: 200,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: destination.length,
-                itemBuilder: (context, index) => Padding(
-                  padding: EdgeInsets.only(left: index == 0 ? 30 : 0),
-                  child: destinationCard(context, destination[index]['imagePath']!),
-                )
+                ),
               ),
-            ),
-            SizedBox(height: 30),
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 20, left: 25, right: 25, bottom: 30),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextWidget(
+              SizedBox(height: kDefaultPadding),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: kDefaultPadding,horizontal: kDefaultPadding),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextWidget(
                       text: 'Hot Destination',
                       size: 24,
-                     ),
-                  TextWidget(
+                      color: Color(0xFF64889F)
+                    ),
+                    TextWidget(
                       text: 'More',
                       size: 16,
-                      color: Colors.white24),
-                ],
+                      color: Colors.white30,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(
-              height: 200,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: hotDestination.length,
-                itemBuilder: (context, index) => 
-                  Padding(
-                    padding: EdgeInsets.only(left: index  == 0 ? 30: 0),
-                    child: hotDestinationCard(hotDestination[index]['imagePath']!, hotDestination[index]['placeName']!, hotDestination[index]['placeCount']!, context ),
-                  )
+              SizedBox(height: kDefaultPadding),
+              Container(
+                height: 200,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: hotDestinations.length,
+                  itemBuilder: (context, index) => Padding(
+                    padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                    child: hotDestinationCard(hotDestinations[index],context ),
+                  ),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 30, left: 25, right: 25, bottom: 30),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextWidget(
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: kDefaultPadding,horizontal: kDefaultPadding),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextWidget(
                       text: 'Visiter Reviews',
                       size: 20,
-                      ),
-                  TextWidget(
+                      color: Color(0xFF64889F)
+                    ),
+                    TextWidget(
                       text: '22 Reviews',
                       size: 14,
-                      color: Colors.white24),
-                ],
+                     color: Colors.white30,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Container(
-              padding: const EdgeInsets.only(
-                  top: 0, left: 25, right: 25, bottom: 30),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 30,
-                    height: 30,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/man.jpeg'),
+              SizedBox(height: kDefaultPadding),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: kDefaultPadding,horizontal: kDefaultPadding),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width:30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/man.jpeg'),
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 20),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width - 100,
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextWidget(
-                                text: 'Arjun Unni',
+                    SizedBox(width: 15),
+                    Container(
+                      width: MediaQuery.of(context).size.width - 100,
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextWidget(
+                                text: 'Punithraj M N',
                                 size: 16,
-                                ),
-                            TextWidget(
+                                color: Color(0xFF435b61),
+                              ),
+                              TextWidget(
                                 text: 'Jan 25',
-                                size: 10,
-                                color: Colors.white24),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        TextWidget(
-                            text:
-                                'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries',
+                                size: 16,
+                                color: Color(0xFF435b61),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: kDefaultPadding,),
+                          TextWidget(
+                            text:'The Taj Mahal is an ivory-white marble mausoleum on the southern bank of the river Yamuna in the Indian city of Agra',
                             size: 13,
                             fontWeight: FontWeight.w500,
-                            color: Colors.white38),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
+                            color: Colors.white38
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        )
       ),
+
+      floatingActionButton: BottomNavigationBarTravel(
+        distance: 112.0,
+        children: [
+          ActionButton(
+            onPressed: () => {},
+            icon: const Icon(Icons.home),
+          ),
+          ActionButton(
+            onPressed: () =>{},
+            icon: const Icon(Icons.place),
+          ),
+          ActionButton(
+            onPressed: () => {},
+            icon: const Icon(Icons.person),
+          ),
+        ],
+      ),
+      
     );
   }
 
-  Widget hotDestinationCard(String imagePath, String placeName,
-      String touristPlaceCount, BuildContext context) {
+  AppBar buildAppBar() {
+    return AppBar(
+      backgroundColor: secondaryColor,
+      elevation: 0,
+      title: TextWidget(
+        text: 'Destination',
+        size: 32,
+        fontWeight: FontWeight.w700,
+        color: Color(0xFFa3ebec),
+      ),
+      flexibleSpace: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [secondaryColor,secondaryColor],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          )
+        ),
+      ),
+      actions: <Widget>[
+        RawMaterialButton(
+          constraints: BoxConstraints(minWidth: 0),
+          onPressed: (){},
+          elevation: 2.0,
+          fillColor: Color(0xFF212861),
+          padding: EdgeInsets.all(8),
+          child: Icon(Icons.search_rounded,color: Color(0xFF5f78a6),size: 25,),
+          shape: CircleBorder(),
+        )
+      ],
+    );
+  }
+
+  Widget hotDestinationCard(HotDestinations hotDest, BuildContext context) {
     return GestureDetector(
       onTap: () => {
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => DestinationDetail(imagePath)))
+            MaterialPageRoute(builder: (context) => DestinationDetail(hotDest: hotDest,)))
       },
       child: Stack(children: [
         Hero(
-          tag: imagePath,
+          tag: hotDest.image,
           child: Container(
             height: 200,
-            width: 140,
-            margin: EdgeInsets.only(right: 25),
-            padding: EdgeInsets.only(bottom: 20),
+            width: 150,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(25),
               image: DecorationImage(
-                image: AssetImage(imagePath),
+                image: AssetImage(hotDest.image),
                 fit: BoxFit.cover,
               ),
             ),
@@ -207,7 +227,7 @@ class HomeScreen extends StatelessWidget {
           left: 0,
           child: Container(
             height: 200,
-            width: 140,
+            width: 150,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(25),
               gradient: LinearGradient(
@@ -225,12 +245,12 @@ class HomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextWidget(
-                    text: placeName,
+                    text: hotDest.placeName,
                     size: 15,
                     fontWeight: FontWeight.w800),
                 SizedBox(height: 4),
                 TextWidget(
-                    text: touristPlaceCount,
+                    text: hotDest.placeCount+" Tourist place",
                     color: Colors.white54,
                     size: 10,
                     fontWeight: FontWeight.w800)
@@ -242,21 +262,16 @@ class HomeScreen extends StatelessWidget {
 
   Widget destinationCard(BuildContext context, String imagePath) {
     return GestureDetector(
-      onTap: () => {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => DestinationDetail(imagePath)))
-      },
+      onTap: () => {},
       child: Stack(
         children: [
           Container(
-            height: 200,
-            margin: EdgeInsets.only(right: 20),
             width: MediaQuery.of(context).size.width - 60,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               image: DecorationImage(
                 image: AssetImage(imagePath),
-                fit: BoxFit.cover,
+                fit: BoxFit.fill,
               ),
             ),
           ),
@@ -264,7 +279,7 @@ class HomeScreen extends StatelessWidget {
             top: 0,
             left: 0,
             child: Opacity(
-              opacity: 1.0,
+              opacity: 0.7,
               child: Container(
                 height: 200,
                 width: MediaQuery.of(context).size.width - 60,
@@ -278,32 +293,6 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Padding customAppBar() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20, left: 25, right: 25, bottom: 50),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          TextWidget(
-              text: 'Destination',
-              size: 32,
-              fontWeight: FontWeight.w700,
-              ),
-          RawMaterialButton(
-            constraints: BoxConstraints(minWidth: 0),
-            onPressed: null,
-            elevation: 2.0,
-            fillColor: Colors.white10,
-            padding: EdgeInsets.all(8),
-            child: Icon(Icons.search_rounded,
-                color: primaryColor, size: 30),
-            shape: CircleBorder(),
           )
         ],
       ),

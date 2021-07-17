@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:travel_ui/models/HotDestinaltion.dart';
 import 'package:travel_ui/utils/TextWidget.dart';
 import 'package:travel_ui/utils/constant.dart';
 
 class DestinationDetail extends StatefulWidget {
-  final String imagePath;
-  const DestinationDetail(this.imagePath);
+  final HotDestinations hotDest;
+  DestinationDetail({Key? key, required this.hotDest}) : super(key: key);
 
   @override
   _DestinationDetailState createState() => _DestinationDetailState();
 }
 
-class _DestinationDetailState extends State<DestinationDetail>
-    with SingleTickerProviderStateMixin {
+class _DestinationDetailState extends State<DestinationDetail> with SingleTickerProviderStateMixin {
+
   late AnimationController _controller;
 
   @override
@@ -28,19 +29,22 @@ class _DestinationDetailState extends State<DestinationDetail>
   Widget build(BuildContext context) {
     return DestinationPage(
       controller: _controller,
-      imagePath: widget.imagePath,
+      hotDest: widget.hotDest,
     );
   }
 }
 
 class DestinationPage extends StatelessWidget {
-  final imagePath;
-  DestinationPage(
-      {Key? key, required AnimationController controller, this.imagePath})
-      : animation = DestinationPageEnterAnimation(controller),
-        super(key: key);
+  final HotDestinations hotDest;
   final DestinationPageEnterAnimation animation;
-
+  DestinationPage({
+    Key? key, 
+    required AnimationController controller, 
+    required this.hotDest
+  })
+    : animation = DestinationPageEnterAnimation(controller),
+    super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -51,32 +55,17 @@ class DestinationPage extends StatelessWidget {
 
   Hero _buildAnimation(BuildContext context) {
     return Hero(
-      tag: imagePath,
+      tag: hotDest.image,
       child: Scaffold(
-          floatingActionButton: ButtonTheme(
-            minWidth: MediaQuery.of(context).size.width - 60,
-            height: 56,
-            child: RaisedButton(
-                onPressed: () => {},
-                shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(10.0)),
-                color: lightSecondary,
-                child: TextWidget(
-                    text: 'Select location',
-                    size: 20,
-                    )),
-          ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
-          body: ListView(
+        body: SingleChildScrollView(
+          child:Column(
             children: [
               Container(
                 padding: EdgeInsets.only(top: 30),
                 height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage(imagePath),
+                      image: AssetImage(hotDest.image),
                       fit: BoxFit.cover,
                       alignment: Alignment.topCenter),
                 ),
@@ -98,106 +87,123 @@ class DestinationPage extends StatelessWidget {
                         RawMaterialButton(
                           onPressed: null,
                           shape: CircleBorder(),
-                          child: Image.asset(
-                            'assets/images/info.png',
-                            width: 4,
+                          child: Icon(
+                            Icons.info,
+                            color: Colors.white38,
+                            size: 40,
                           ),
-                          fillColor: Colors.white30,
                           padding: EdgeInsets.all(8),
                         )
                       ],
                     ),
-                    Container(
-                      // height: MediaQuery.of(context).size.height - 350,
-                      height: animation.barHeight.value,
-                      width: MediaQuery.of(context).size.width,
-                      padding: EdgeInsets.only(top: 30, left: 30, right: 30),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            secondaryColor,
-                            tertiaryColor,
-                          ],
+                    SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child:Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: EdgeInsets.symmetric(horizontal: kDefaultPadding,vertical: kDefaultPadding),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0),topRight: Radius.circular(30.0)),
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              secondaryColor,
+                              tertiaryColor,
+                            ]
+                          )
                         ),
-                      ),
-                      child: ListView(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextWidget(
-                                  text: 'America',
-                                  size: 24),
-                              SizedBox(height: 10),
-                              TextWidget(
-                                  text:
-                                      'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries.',
-                                  size: 15,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white38),
-                              SizedBox(height: 30),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  TextWidget(
-                                      text: 'Tourist Places',
-                                      size: 20,
-                                      fontWeight: FontWeight.w600,
-                                      ),
-                                  TextWidget(
-                                      text: '18',
-                                      size: 16,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white24),
-                                ],
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextWidget(
+                              text: hotDest.placeName,
+                              size: 24
+                            ),
+                            SizedBox(height: kDefaultPadding),
+                            Text(
+                              hotDest.description,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 6,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15,
+                                color: Colors.white38
                               ),
-                              SizedBox(height: 20),
-                              SizedBox(
-                                height: 160,
-                                child: ListView(
-                                  scrollDirection: Axis.horizontal,
-                                  children: [
-                                    hotDestinationCard('assets/images/bridge.jpg',
-                                        'AMERICA', '18 Tourist Place', context),
-                                    hotDestinationCard('assets/images/japan-home.jpg',
-                                        'JAPAN', '18 Tourist Place', context),
-                                    hotDestinationCard('assets/images/city.jpg',
-                                        'NEWYORK', '18 Tourist Place', context),
-                                  ],
+                            ),
+                            SizedBox(height: kDefaultPadding,),
+                            Row(
+                              mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                              children:[
+                                TextWidget(
+                                  text: 'Tourist Places',
+                                  size: 20,
+                                  fontWeight: FontWeight.w600,
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                                TextWidget(
+                                  text: hotDest.placeCount,
+                                  size: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white24
+                                ),
+                              ]
+                            ),
+                            SizedBox(height: kDefaultPadding,),
+                            Container(
+                              height: 200,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: hotDest.destinationImages.length,
+                                itemBuilder: (context, index) => Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                                  child: hotDestinationCard(hotDest.destinationImages[index],context ),
+                                )
+                              )   
+                            ),
+                            SizedBox(height: kDefaultPadding),
+                            SizedBox(height: kDefaultPadding),
+                          ]     
+                        ),
+                      )
+                    )
                   ],
                 ),
               ),
             ],
-          )),
+          )
+        ),
+        floatingActionButton: ButtonTheme(
+          child: ConstrainedBox(
+            constraints: BoxConstraints.tightFor(width: MediaQuery.of(context).size.width / 1.1, height: 50),
+            child: ElevatedButton(
+              child: Text(
+                "Select location",
+                style: TextStyle(fontSize: 20)
+              ),
+              style:ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                backgroundColor: MaterialStateProperty.all<Color>(secondaryColor),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ),
+              onPressed: () => {}
+            ),
+          ),
+        ),
+        floatingActionButtonLocation:FloatingActionButtonLocation.centerFloat,
+      ),
     );
   }
 
-  Widget hotDestinationCard(String imagePath, String placeName,
-      String touristPlaceCount, BuildContext context) {
+  Widget hotDestinationCard(String imagePath, BuildContext context) {
     return GestureDetector(
-      onTap: () => {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => DestinationDetail(imagePath)))
-      },
+      onTap: () => {},
       child: Stack(children: [
         Container(
           height: 160,
           width: 160,
-          margin: EdgeInsets.only(right: 25),
-          padding: EdgeInsets.only(bottom: 20),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
             image: DecorationImage(
@@ -228,7 +234,7 @@ class DestinationPage extends StatelessWidget {
 
 class DestinationPageEnterAnimation {
   DestinationPageEnterAnimation(this.controller)
-       : barHeight = Tween<double>(begin: 0, end: 600).animate(
+       : barHeight = Tween<double>(begin: 0, end: 500).animate(
           CurvedAnimation(
             parent: controller,
             curve: Interval(0, 0.5),
