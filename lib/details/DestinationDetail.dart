@@ -80,7 +80,7 @@ class DestinationPage extends StatelessWidget {
                           onPressed: () => {Navigator.pop(context)},
                           icon: Icon(
                             Icons.chevron_left,
-                            color: Colors.white70,
+                            color: Color(0xFF7fafb7),
                             size: 40,
                           ),
                         ),
@@ -89,7 +89,7 @@ class DestinationPage extends StatelessWidget {
                           shape: CircleBorder(),
                           child: Icon(
                             Icons.info,
-                            color: Colors.white38,
+                            color: Color(0xFF7fafb7),
                             size: 40,
                           ),
                           padding: EdgeInsets.all(8),
