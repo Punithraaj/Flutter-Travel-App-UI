@@ -9,7 +9,7 @@
 
 We design two pages one is the home page and another one is travel info page that will help you to design clear interfaces for movie app faster and easier.
 
-### Movie Info App Final UI
+### Travel Info App - Flutter UI
 
 ![App UI 1](/ui.gif)
 
