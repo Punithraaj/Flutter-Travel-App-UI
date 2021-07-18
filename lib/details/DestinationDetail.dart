@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_ui/details/HotDestinationCard.dart';
 import 'package:travel_ui/models/HotDestinaltion.dart';
 import 'package:travel_ui/utils/TextWidget.dart';
 import 'package:travel_ui/utils/constant.dart';
@@ -155,7 +156,7 @@ class DestinationPage extends StatelessWidget {
                                 itemCount: hotDest.destinationImages.length,
                                 itemBuilder: (context, index) => Padding(
                                   padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                                  child: hotDestinationCard(hotDest.destinationImages[index],context ),
+                                  child: HotDestinationCard(tourist: hotDest.destinationImages[index], ),
                                 )
                               )   
                             ),
