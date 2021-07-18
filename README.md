@@ -11,5 +11,5 @@ We design two pages one is the home page and another one is travel info page tha
 
 ### Movie Info App Final UI
 
-![App UI 1](/ui.png)
+![App UI 1](/ui.gif)
 
